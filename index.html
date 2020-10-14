@@ -3,14 +3,54 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>TEMPLATE</title>
-    <link rel="shortcut icon" href="http://www.google.com/s2/favicons?domain=css-tricks.com" type="image/x-icon">
+    <title>25 + 5 Clock</title>
+    <link rel="shortcut icon" href="http://www.google.com/s2/favicons?domain=nikhilchintawar.github.io" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    
+    <header>
+        <h1>25 + 5 Clock</h1>
+    </header>
 
+    <!-- break and session length -->
+    <div class="label-block" >
+        <div id="break-label">
+            <h2>Break Length</h2>
+            <div class="time-block">
+                <i class="fas fa-arrow-down decrease"></i>
+                <span class="break-time">5</span>
+                <i class="fas fa-arrow-up increase"></i>
+            </div>
+        </div>
+        <div id="session-label">
+            <h2>Session Length</h2>
+            <div class="time-block">
+                <i class="fas fa-arrow-down decrease"></i>
+                <span class="session-time">25</span>
+                <i class="fas fa-arrow-up increase"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- timer -->
+    <div class="timer">
+        <div class="timer-block">
+            <h2>Session</h2>
+            <div class="session-time">
+                25:00
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-button">
+        <i class="fas fa-play"></i>
+        <i class="fas fa-sync"></i>
+    </div>
+
+    <footer>
+        Designed and Coded by Nikhil Chintawar
+    </footer>
     <!-- script -->
     <script src="./index.js"></script>
 </body>
