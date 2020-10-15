@@ -7,9 +7,16 @@ const decreaseSessionTime = document.querySelector(".session-time-decrease");
 const playButton = document.getElementById("playButton");
 const displaySeconds = document.querySelector(".seconds");
 const displayMinutes = document.querySelector(".minutes")
+const faPlay = document.querySelector(".fa-play");
+const faPause = document.querySelector(".fa-pause");
+const controlsButton = document.querySelector(".controls-button");
+
 
 let brTime = parseInt(breakTime.textContent);
 let seTime = parseInt(sessionTime.textContent);
+let remainingMinutes = displayMinutes.textContent;
+let remainingSeconds = displaySeconds.textContent;
+let click = 0;
 
 const second = 1000;
 const minute = second * 60;
@@ -39,6 +46,7 @@ const decSessionTime = () => {
 }
 
 let seconds = 0;
+let updatedSeconds;
 let interval;
 
 
@@ -47,8 +55,15 @@ const pomodoro = (mins) => {
 
     interval = setInterval(function(){
         seconds--;
-        displaySeconds.textContent = seconds;
-        displayMinutes.textContent = seTime - 1;
+
+        if(click > 0){
+            seconds = parseInt(updatedSeconds);
+            displayMinutes.textContent = seTime;
+            displaySeconds.textContent = updatedSeconds;
+        }else{
+            displayMinutes.textContent = seTime - 1;
+            displaySeconds.textContent = seconds;
+        }
 
         if(!seconds){
 
@@ -63,12 +78,35 @@ const pomodoro = (mins) => {
     }, second)
 }
 
-// const playPomodoro = (){
+let playing;
 
-// }
+const faPlayButton = () => {
+        controlsButton.children[0].classList.replace("fa-play", "fa-pause");
+        pomodoro(1);
+}
+
+const faPauseButton = () => {
+    controlsButton.children[0].classList.replace("fa-pause", "fa-play");
+    clearInterval(interval);
+}
+
+
+const togglePlay = () => {
+    if(playing){
+        faPauseButton();
+        seTime = displayMinutes.textContent;
+        updatedSeconds = displaySeconds.textContent;
+        playing = false;
+        click++;
+
+    }else{
+        faPlayButton();
+        playing = true;
+    }
+}
 
 increaseBreakTime.addEventListener('click', incBreakTime);
 decreaseBreakTime.addEventListener('click', decBreakTime);
 increaseSessionTime.addEventListener('click', incSessionTime);
 decreaseSessionTime.addEventListener('click', decSessionTime);
-playButton.addEventListener('click', () => pomodoro(1))
+playButton.addEventListener('click', togglePlay);
