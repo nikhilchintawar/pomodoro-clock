@@ -9,6 +9,7 @@ const displaySeconds = document.querySelector(".seconds");
 const displayMinutes = document.querySelector(".minutes")
 const faPlay = document.querySelector(".fa-play");
 const faPause = document.querySelector(".fa-pause");
+const faSync = document.querySelector(".fa-sync");
 const controlsButton = document.querySelector(".controls-button");
 
 
@@ -16,6 +17,7 @@ let brTime = parseInt(breakTime.textContent);
 let seTime = parseInt(sessionTime.textContent);
 let remainingMinutes = displayMinutes.textContent;
 let remainingSeconds = displaySeconds.textContent;
+let resetSeconds = remainingSeconds;
 let click = 0;
 
 const second = 1000;
@@ -55,24 +57,28 @@ const pomodoro = (mins) => {
 
     interval = setInterval(function(){
         seconds--;
-
+        
+        // console.log(click)
+        // console.log('1',seconds)
+        // console.log('2',updatedSeconds)
         if(click > 0){
-            seconds = parseInt(updatedSeconds);
+            updatedSeconds--;
             displayMinutes.textContent = seTime;
-            displaySeconds.textContent = updatedSeconds;
+            displaySeconds.textContent = parseInt(updatedSeconds);
         }else{
             displayMinutes.textContent = seTime - 1;
             displaySeconds.textContent = seconds;
         }
 
-        if(!seconds){
+        if(!seconds || (click > 0 && !updatedSeconds)){
 
             seTime--;
             displayMinutes.textContent = seTime;
+            clearInterval(interval)
             pomodoro(1);
 
             if(!seTime){
-                clearInterval(interval)
+                //
             }
         }
     }, second)
@@ -96,6 +102,7 @@ const togglePlay = () => {
         faPauseButton();
         seTime = displayMinutes.textContent;
         updatedSeconds = displaySeconds.textContent;
+        console.log(updatedSeconds)
         playing = false;
         click++;
 
@@ -105,8 +112,17 @@ const togglePlay = () => {
     }
 }
 
+const reset = () => {
+    faPauseButton()
+    displayMinutes.textContent = seTime;
+    displaySeconds.textContent = resetSeconds
+    click = 0;
+    playing = false;
+}
+
 increaseBreakTime.addEventListener('click', incBreakTime);
 decreaseBreakTime.addEventListener('click', decBreakTime);
 increaseSessionTime.addEventListener('click', incSessionTime);
 decreaseSessionTime.addEventListener('click', decSessionTime);
 playButton.addEventListener('click', togglePlay);
+faSync.addEventListener('click', reset);
