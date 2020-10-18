@@ -15,10 +15,13 @@ const controlsButton = document.querySelector(".controls-button");
 
 let brTime = parseInt(breakTime.textContent);
 let seTime = parseInt(sessionTime.textContent);
+let setSeTime = seTime;
+let setBrTime = brTime;
 let remainingMinutes = displayMinutes.textContent;
 let remainingSeconds = displaySeconds.textContent;
 let resetSeconds = remainingSeconds;
 let click = 0;
+let breakTimeStarted = false;
 
 const second = 1000;
 const minute = second * 60;
@@ -62,28 +65,62 @@ const pomodoro = (mins) => {
         // console.log('1',seconds)
         // console.log('2',updatedSeconds)
         if(click > 0 && updatedSeconds){ 
-            updatedSeconds--;
-            displayMinutes.textContent = seTime;
+            updatedSeconds--;        
             updatedSeconds < 10 ? displaySeconds.textContent = `0${parseInt(updatedSeconds)}` : displaySeconds.textContent = parseInt(updatedSeconds);
-            // displaySeconds.textContent = parseInt(updatedSeconds);
+            
             if(!updatedSeconds){
                 click = 0;
                 seconds = 0; 
             }
+
         }else{
-            seTime === 25 ? displayMinutes.textContent = seTime - 1: displayMinutes.textContent = seTime;
+            if(breakTimeStarted){
+                if(brTime === setBrTime){
+                    brTime--;
+                    if (brTime < 0) {
+                        brTime = 0;
+                    }
+                    displayMinutes.textContent = brTime;
+                }else{
+                    displayMinutes.textContent = brTime
+                }
+            }else{
+                if(seTime === setSeTime){
+                    seTime--;
+                    if (seTime < 0 ) {
+                        seTime = 0;
+                    }
+                    displayMinutes.textContent = seTime;
+                }else{
+                    displayMinutes.textContent = seTime;
+                }
+            }
             seconds < 10 ? displaySeconds.textContent = `0${seconds}` : displaySeconds.textContent = seconds;
         }
 
         if(!seconds){
 
-            seTime--;
-            displayMinutes.textContent = seTime;
-            clearInterval(interval)
-            if(!seTime){
-                //
+            if(breakTimeStarted){
+                brTime--;
+                displayMinutes.textContent = brTime;
+            }else{
+                seTime--;
+                displayMinutes.textContent = seTime;
             }
+            clearInterval(interval)
             pomodoro(1);
+            if(seTime === -1 && !breakTimeStarted){
+                breakTimeStarted = true;
+                console.log("break time started")
+                displayMinutes.textContent = brTime;
+                seTime = setSeTime;
+            }
+            if(brTime === -1 && breakTimeStarted){
+                breakTimeStarted = false;
+                console.log("session time");
+                displayMinutes.textContent = seTime;
+                brTime = setBrTime;
+            }
 
         }
     }, second)
