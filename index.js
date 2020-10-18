@@ -61,25 +61,30 @@ const pomodoro = (mins) => {
         // console.log(click)
         // console.log('1',seconds)
         // console.log('2',updatedSeconds)
-        if(click > 0){
+        if(click > 0 && updatedSeconds){ 
             updatedSeconds--;
             displayMinutes.textContent = seTime;
-            displaySeconds.textContent = parseInt(updatedSeconds);
+            updatedSeconds < 10 ? displaySeconds.textContent = `0${parseInt(updatedSeconds)}` : displaySeconds.textContent = parseInt(updatedSeconds);
+            // displaySeconds.textContent = parseInt(updatedSeconds);
+            if(!updatedSeconds){
+                click = 0;
+                seconds = 0; 
+            }
         }else{
-            displayMinutes.textContent = seTime - 1;
-            displaySeconds.textContent = seconds;
+            seTime === 25 ? displayMinutes.textContent = seTime - 1: displayMinutes.textContent = seTime;
+            seconds < 10 ? displaySeconds.textContent = `0${seconds}` : displaySeconds.textContent = seconds;
         }
 
-        if(!seconds || (click > 0 && !updatedSeconds)){
+        if(!seconds){
 
             seTime--;
             displayMinutes.textContent = seTime;
             clearInterval(interval)
-            pomodoro(1);
-
             if(!seTime){
                 //
             }
+            pomodoro(1);
+
         }
     }, second)
 }
@@ -102,7 +107,7 @@ const togglePlay = () => {
         faPauseButton();
         seTime = displayMinutes.textContent;
         updatedSeconds = displaySeconds.textContent;
-        console.log(updatedSeconds)
+        // console.log(updatedSeconds)
         playing = false;
         click++;
 
@@ -119,6 +124,10 @@ const reset = () => {
     click = 0;
     playing = false;
 }
+
+// const breakTime = (){
+    
+// }
 
 increaseBreakTime.addEventListener('click', incBreakTime);
 decreaseBreakTime.addEventListener('click', decBreakTime);
