@@ -11,12 +11,13 @@ const faPlay = document.querySelector(".fa-play");
 const faPause = document.querySelector(".fa-pause");
 const faSync = document.querySelector(".fa-sync");
 const controlsButton = document.querySelector(".controls-button");
+const seBrHeading = document.getElementById("se-br-heading");
 
 
 let brTime = parseInt(breakTime.textContent);
 let seTime = parseInt(sessionTime.textContent);
-let setSeTime = seTime;
-let setBrTime = brTime;
+let setSeTime;
+let setBrTime;
 let remainingMinutes = displayMinutes.textContent;
 let remainingSeconds = displaySeconds.textContent;
 let resetSeconds = remainingSeconds;
@@ -27,27 +28,37 @@ const second = 1000;
 const minute = second * 60;
 
 const incBreakTime = () => {
-    brTime += 1
-    breakTime.textContent = brTime
+    brTime += 1;
+    breakTime.textContent = brTime;
+    brTime < 10 ? displayMinutes.textContent = `0${brTime}` : displayMinutes.textContent = brTime;
+    brTime = parseInt(breakTime.textContent);
+    setBrTime = brTime;
 }
 
 const decBreakTime = () => {
     if(brTime === 0) return;
-    brTime -= 1
-    breakTime.textContent = brTime
+    brTime -= 1;
+    breakTime.textContent = brTime;
+    brTime < 10 ? displayMinutes.textContent = `0${brTime}` : displayMinutes.textContent = brTime;
+    brTime = parseInt(breakTime.textContent);
+    setBrTime = brTime;
 }
 
 const incSessionTime = () => {
-    seTime += 1
+    seTime++;
     sessionTime.textContent = seTime
-    displayMinutes.textContent = seTime
+    seTime < 10 ? displayMinutes.textContent = `0${seTime}` : displayMinutes.textContent = seTime;
+    seTime = parseInt(sessionTime.textContent);
+    setSeTime = seTime
 }
 
 const decSessionTime = () => {
     if(seTime === 0) return;
-    seTime -= 1
+    seTime--;
     sessionTime.textContent = seTime
-    displayMinutes.textContent = seTime
+    seTime < 10 ? displayMinutes.textContent = `0${seTime}` : displayMinutes.textContent = seTime;
+    seTime = parseInt(sessionTime.textContent);
+    setSeTime = seTime
 }
 
 let seconds = 0;
@@ -77,22 +88,26 @@ const pomodoro = (mins) => {
             if(breakTimeStarted){
                 if(brTime === setBrTime){
                     brTime--;
-                    if (brTime < 0) {
+                    if (brTime <= 0) {
                         brTime = 0;
+                        displaySeconds.classList.add("warning");
                     }
-                    displayMinutes.textContent = brTime;
+                        brTime < 10 ? displayMinutes.textContent = `0${brTime}` : displayMinutes.textContent = brTime;
+
                 }else{
-                    displayMinutes.textContent = brTime
+                        brTime < 10 ? displayMinutes.textContent = `0${brTime}` : displayMinutes.textContent = brTime;
+
                 }
             }else{
                 if(seTime === setSeTime){
                     seTime--;
-                    if (seTime < 0 ) {
+                    if (seTime <= 0) {
                         seTime = 0;
+                        displaySeconds.classList.add("warning");
                     }
-                    displayMinutes.textContent = seTime;
+                    seTime < 10 ? displayMinutes.textContent = `0${seTime}` : displayMinutes.textContent = seTime;
                 }else{
-                    displayMinutes.textContent = seTime;
+                    seTime < 10 ? displayMinutes.textContent = `0${seTime}` : displayMinutes.textContent = seTime;                    
                 }
             }
             seconds < 10 ? displaySeconds.textContent = `0${seconds}` : displaySeconds.textContent = seconds;
@@ -102,23 +117,32 @@ const pomodoro = (mins) => {
 
             if(breakTimeStarted){
                 brTime--;
-                displayMinutes.textContent = brTime;
+                    brTime < 10 ? displayMinutes.textContent = `0${brTime}` : displayMinutes.textContent = brTime;
+
             }else{
                 seTime--;
-                displayMinutes.textContent = seTime;
+                seTime < 10 ? displayMinutes.textContent = `0${seTime}` : displayMinutes.textContent = seTime;
             }
             clearInterval(interval)
             pomodoro(1);
+            if(seTime === 0 || brTime === 0){
+                console.log(brTime, seTime)
+                displaySeconds.classList.add("warning");
+            }
             if(seTime === -1 && !breakTimeStarted){
                 breakTimeStarted = true;
                 console.log("break time started")
                 displayMinutes.textContent = brTime;
+                displaySeconds.classList.remove("warning");
+                seBrHeading.textContent = "Break Time!";
                 seTime = setSeTime;
             }
             if(brTime === -1 && breakTimeStarted){
                 breakTimeStarted = false;
                 console.log("session time");
                 displayMinutes.textContent = seTime;
+                displaySeconds.classList.remove("warning");
+                seBrHeading.textContent = "Session";
                 brTime = setBrTime;
             }
 
@@ -156,7 +180,7 @@ const togglePlay = () => {
 
 const reset = () => {
     faPauseButton()
-    displayMinutes.textContent = seTime;
+    displayMinutes.textContent = setSeTime;
     displaySeconds.textContent = resetSeconds
     click = 0;
     playing = false;
