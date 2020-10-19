@@ -1,3 +1,3 @@
 # Pomodoro Clock
 
-check out the website here: https://chintawar-crown-clothing.herokuapp.com/
+check out the website here: https://nikhilchintawar.github.io/pomodoro-clock/
